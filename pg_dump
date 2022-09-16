@@ -120,8 +120,8 @@ CREATE TABLE public.contracts (
     contract_id integer NOT NULL,
     client_id integer NOT NULL,
     sneaker_id integer NOT NULL,
-    sign_date timestamp with time zone NOT NULL,
-    deadline timestamp with time zone
+    sign_date timestamp without time zone NOT NULL,
+    deadline timestamp without time zone
 );
 
 
@@ -152,7 +152,8 @@ CREATE TABLE public.employee (
     father_name character varying(15),
     phone text,
     email text,
-    address text
+    address text,
+    factory_role character varying(30)
 );
 
 
@@ -209,7 +210,7 @@ ALTER TABLE public.jobs ALTER COLUMN job_id ADD GENERATED ALWAYS AS IDENTITY (
 --
 
 CREATE TABLE public.potential_clients (
-    meeting timestamp with time zone
+    meeting timestamp without time zone
 )
 INHERITS (public.clients);
 
@@ -284,9 +285,9 @@ COPY public.clients (client_id, first_name, second_name, organisation_name, phon
 --
 
 COPY public.contracts (contract_id, client_id, sneaker_id, sign_date, deadline) FROM stdin;
-1	3	2	2022-09-11 18:21:22.873601+03	2022-10-11 18:21:22.873601+03
-2	2	3	2022-07-31 18:24:52.174858+03	2022-11-23 18:24:52.174858+03
-3	1	2	2022-09-11 18:24:52.221908+03	\N
+1	3	2	2022-09-11 15:21:22.873601	2022-10-11 15:21:22.873601
+2	2	3	2022-07-31 15:24:52.174858	2022-11-23 15:24:52.174858
+3	1	2	2022-09-11 15:24:52.221908	\N
 \.
 
 
@@ -294,10 +295,10 @@ COPY public.contracts (contract_id, client_id, sneaker_id, sign_date, deadline) 
 -- Data for Name: employee; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.employee (employee_id, first_name, second_name, father_name, phone, email, address) FROM stdin;
-1	Дмитрий	Лакутин	Алексеевич	+79775179280	haydurb@mail.com	Московская обл. г.Ногинск ул.Пушкина д.15 кв.123
-2	Sharil	Lebowski	\N	+1 720-409-2532	wheresthemoney@gmail.com	c. USA st. Texas s. 1638 Brentwood Drive 
-3	Олег	Харьков	Владимирович	89265334529	\N	\N
+COPY public.employee (employee_id, first_name, second_name, father_name, phone, email, address, factory_role) FROM stdin;
+1	Дмитрий	Лакутин	Алексеевич	+79775179280	haydurb@mail.com	Московская обл. г.Ногинск ул.Пушкина д.15 кв.123	\N
+2	Sharil	Lebowski	\N	+1 720-409-2532	wheresthemoney@gmail.com	c. USA st. Texas s. 1638 Brentwood Drive 	\N
+3	Олег	Харьков	Владимирович	89265334529	\N	\N	\N
 \.
 
 
@@ -317,8 +318,8 @@ COPY public.jobs (job_id, creator_empl_id, executor_empl_id, contr_id, descripti
 --
 
 COPY public.potential_clients (client_id, first_name, second_name, organisation_name, phone, email, address, meeting) FROM stdin;
-1	Сергей	Комаров	ИП Комаровский бутик	8(969)2012298	komarov@yandex.ru	Нижний Новгород Тюхачевского д.56	2023-03-15 13:00:00+03
-2	\N	\N	Shabudabu Shop	3(8585)775-27-01 	shabudabu0shop@gmail.com	4786 Lyric Causeway Suite 291 West Irma, NM 84308-2385	2027-06-28 20:00:00+03
+1	Сергей	Комаров	ИП Комаровский бутик	8(969)2012298	komarov@yandex.ru	Нижний Новгород Тюхачевского д.56	2023-03-15 10:00:00
+2	\N	\N	Shabudabu Shop	3(8585)775-27-01 	shabudabu0shop@gmail.com	4786 Lyric Causeway Suite 291 West Irma, NM 84308-2385	2027-06-28 17:00:00
 3	\N	\N	SneakerTops	\N	\N	\N	\N
 \.
 
@@ -493,6 +494,96 @@ ALTER TABLE ONLY public.jobs
 
 ALTER TABLE ONLY public.jobs
     ADD CONSTRAINT jobs_executor_empl_id_fkey FOREIGN KEY (executor_empl_id) REFERENCES public.employee(employee_id);
+
+
+--
+-- Name: jobs empl_select_p; Type: POLICY; Schema: public; Owner: postgres
+--
+
+CREATE POLICY empl_select_p ON public.jobs FOR SELECT TO employee USING ((( SELECT employee.employee_id
+   FROM public.employee
+  WHERE ((employee.factory_role)::text = CURRENT_USER)
+ LIMIT 1) = executor_empl_id));
+
+
+--
+-- Name: jobs empl_update_p; Type: POLICY; Schema: public; Owner: postgres
+--
+
+CREATE POLICY empl_update_p ON public.jobs FOR UPDATE TO employee USING ((( SELECT employee.employee_id
+   FROM public.employee
+  WHERE ((employee.factory_role)::text = CURRENT_USER)
+ LIMIT 1) = executor_empl_id));
+
+
+--
+-- Name: jobs; Type: ROW SECURITY; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.jobs ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: jobs man_update_p; Type: POLICY; Schema: public; Owner: postgres
+--
+
+CREATE POLICY man_update_p ON public.jobs FOR UPDATE TO factory_manager USING (((( SELECT employee.employee_id
+   FROM public.employee
+  WHERE ((employee.factory_role)::text = CURRENT_USER)
+ LIMIT 1) = creator_empl_id) OR (( SELECT employee.employee_id
+   FROM public.employee
+  WHERE ((employee.factory_role)::text = CURRENT_USER)
+ LIMIT 1) = executor_empl_id)));
+
+
+--
+-- Name: TABLE clients; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.clients TO factory_admin;
+
+
+--
+-- Name: TABLE available_clients; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.available_clients TO factory_admin;
+
+
+--
+-- Name: TABLE contracts; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.contracts TO factory_admin;
+
+
+--
+-- Name: TABLE employee; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.employee TO factory_admin;
+
+
+--
+-- Name: TABLE jobs; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.jobs TO factory_admin;
+GRANT SELECT,INSERT,UPDATE ON TABLE public.jobs TO factory_manager;
+GRANT SELECT,UPDATE ON TABLE public.jobs TO employee;
+
+
+--
+-- Name: TABLE potential_clients; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.potential_clients TO factory_admin;
+
+
+--
+-- Name: TABLE sneakers; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.sneakers TO factory_admin;
 
 
 --
