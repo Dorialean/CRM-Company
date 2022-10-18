@@ -1,0 +1,15 @@
+﻿.icon {
+    min-width: 5px;
+    min-height: 5px;
+    max-height: 100px;
+    max-width: 100px;
+}
+
+ul.horiz li {
+    display: inline-block; /* Отображать как строчный элемент */
+    margin:5px;
+}
+
+header.container{
+    min-width:100%;
+}
