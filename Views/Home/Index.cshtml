@@ -1,8 +1,28 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Sneaker Factory";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container">
+    <div class="row">
+        <img class="col-8 img-thumbnail rounded p-1" src="~/img/zavod.jpg" asp-append-version="true" />
+        <div class="col-4">
+            <img class="img-thumbnail rounded mb-1" src="~/img/sneaker1.png" asp-append-version="true" />
+            <img class="img-thumbnail rounded mb-1" src="~/img/sneaker2.png" asp-append-version="true" />
+            <img class="img-thumbnail rounded mb-1" src="~/img/sneaker3.png" asp-append-version="true" />
+        </div>
+    </div>
+    <h1 class="text-center">Добро пожаловать!</h1>
+    <div class= "row ms-3">
+        <!--Тут Home и Index надо будет поменять на нужные страницы-->
+        <a class="col btn btn-success m-1" asp-area="" asp-controller="Home" asp-action="Index">
+            <p class="text-center display-5">
+                <strong>Я заказчик</strong>
+            </p>
+        </a>
+        <a class="col btn btn-success m-1" asp-area="" asp-controller="Home" asp-action="Index">
+            <p class="text-center display-5">
+                <strong>Я сотрудник</strong>
+            </p>
+        </a>
+    </div>
 </div>
