@@ -3,7 +3,6 @@
 }
 
 <div class="container">
-    <h1>Добро пожаловать!</h1>
     <div class="row">
         <img class="col-8 img-thumbnail rounded p-1" src="~/img/zavod.jpg" asp-append-version="true" />
         <div class="col-4">
@@ -12,12 +11,14 @@
             <img class="img-thumbnail rounded mb-1" src="~/img/sneaker3.png" asp-append-version="true" />
         </div>
     </div>
-    <div class="row ms-3">
-        <button class="col btn btn-success m-1">
-            <p>Я заказчик</p>
-        </button>
-        <button class="col btn btn-success m-1">
-            <p>Я сотрудник</p>
-        </button>
+    <h1 class="text-center">Добро пожаловать!</h1>
+    <div class= "row ms-3">
+        <!--Тут Home и Index надо будет поменять на нужные страницы-->
+        <a class="col btn btn-success m-1" asp-area="" asp-controller="Home" asp-action="Index">
+            <p class="text-center display-5"><strong>Я заказчик</strong></p>
+        </a>
+        <a class="col btn btn-success m-1" asp-area="" asp-controller="Home" asp-action="Index">
+            <p class="text-center display-5"><strong>Я сотрудник</strong></p>
+        </a>
     </div>
 </div>
