@@ -1,0 +1,26 @@
+@{
+    ViewBag.Title = "Регистрация сотрудника";
+    Layout = "_Layout";
+}
+
+<div class="row" method="post">
+    <form class="col">
+        <input type="text" name="first_name" placeholder="Введите Имя"><br/>
+        <input type="text" name="second_name" placeholder="Введите Фамилию"><br/>
+        <input type="text" name="father_name" placeholder="Введите Отчетсво"><br/>
+        <input type="tel" name="phone_number" placeholder="Введите номер телефона"><br/>
+        <input type="email" name="e_mail" placeholder="Введите электронную почту"><br/>
+        <input type="text" name="address" placeholder="Введите адрес"><br/>
+        <input type="radio" id="employee" name="role" value="EMP">
+        <label for="employee">Я - сотрудник</label>
+        <input type="radio" id="manager" name="role" value="MAN">
+        <label for="manager">Я - менеджер</label><br/>
+        <input type="text" name="login" placeholder="Придумайте логин"><br/>
+        <input type="password" name="password" placeholder="Придумайте пароль"><br/>
+        <input type="submit" value="Ввести информацию"/>
+    </form>
+</div>
+
+@section Scripts {
+    <link href="~/css/register.css" rel="stylesheet" type="text/css"  asp-append-version="true"/>
+}
