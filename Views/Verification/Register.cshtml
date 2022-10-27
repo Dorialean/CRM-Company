@@ -1,0 +1,28 @@
+@model Employee
+@{
+    ViewBag.Title = "Регистрация сотрудника";
+    Layout = "_Layout";
+}
+
+<div class="row">
+    @using(Html.BeginForm())
+    {
+        @Html.TextBoxFor(f => f.FirstName, new { @class = "inp", @placeholder = "Введите имя"});<br/>
+        @Html.TextBoxFor(sn => sn.SecondName, new {@class = "inp", @placeholder = "Введите фамилию"});<br/>
+        @Html.TextBoxFor(fan => fan.FatherName, new {@class = "inp", @placeholder = "Введите отчество"});<br/>
+        @Html.TextBoxFor(p => p.Phone, new {@class = "inp", @placeholder = "Введите номер телефона"});<br/>
+        @Html.TextBoxFor(e => e.Email, new {@class = "inp", @placeholder = "Введите электроную почту"});<br/>
+        @Html.TextBoxFor(ad => ad.Address, new {@class = "inp", @placeholder = "Введите адрес"});<br/>
+        @Html.RadioButtonFor(fr => fr.FactoryRole, new {@class = "inp",  @name = "role", @value = "EMP"});
+        <label for="role">Сотрудник</label><br/>
+        @Html.RadioButtonFor(fr => fr.FactoryRole, new {@class = "inp",  @name = "role", @value = "MAN"});
+        <label for="role">Менеджер</label><br/>
+        @Html.TextBoxFor(l => l.Login, new {@class = "inp", @placeholder = "Придумайте логин"});<br/>
+        @Html.PasswordFor(pas => pas.Password, new {@class = "inp", @placeholder = "Введите пароль"});<br/>
+        <input type="submit" value="Подтвердить">
+    }
+</div>
+
+@section Scripts {
+    <link href="~/css/register.css" rel="stylesheet" type="text/css"  asp-append-version="true"/>
+}

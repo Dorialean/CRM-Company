@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Company_CRM.Models
 {
     public partial class Job
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
         public int JobId { get; set; }
         public int CreatorEmplId { get; set; }
         public int ExecutorEmplId { get; set; }

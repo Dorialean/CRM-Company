@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Company_CRM.Models
 {
@@ -10,7 +12,8 @@ namespace Company_CRM.Models
             JobCreatorEmpls = new HashSet<Job>();
             JobExecutorEmpls = new HashSet<Job>();
         }
-
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
         public int EmployeeId { get; set; }
         public string FirstName { get; set; } = null!;
         public string SecondName { get; set; } = null!;
@@ -25,5 +28,5 @@ namespace Company_CRM.Models
 
         public virtual ICollection<Job> JobCreatorEmpls { get; set; }
         public virtual ICollection<Job> JobExecutorEmpls { get; set; }
-    }
+        }
 }
