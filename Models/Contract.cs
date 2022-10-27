@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Company_CRM.Models
 {
@@ -10,7 +12,8 @@ namespace Company_CRM.Models
             AvailableClients = new HashSet<AvailableClient>();
             Jobs = new HashSet<Job>();
         }
-
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
         public int ContractId { get; set; }
         public int ClientId { get; set; }
         public int SneakerId { get; set; }

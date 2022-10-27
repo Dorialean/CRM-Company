@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Company_CRM.Models
 {
@@ -9,7 +11,8 @@ namespace Company_CRM.Models
         {
             Contracts = new HashSet<Contract>();
         }
-
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
         public int SneakerId { get; set; }
         public string? Model { get; set; }
         public decimal? Weight { get; set; }

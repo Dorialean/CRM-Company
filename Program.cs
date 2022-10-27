@@ -1,7 +1,19 @@
+using Company_CRM.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+string connectionStrings = builder.Configuration.GetConnectionString("LaptopConnectionString");
+builder.Services.AddDbContext<SneakerFactoryContext>(options => options.UseNpgsql(connectionStrings));
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Verification/Register";
+    });
+
 
 var app = builder.Build();
 
@@ -23,5 +35,9 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "registration",
+    pattern: "{controller=Verification}/{action=Index}");
 
 app.Run();
