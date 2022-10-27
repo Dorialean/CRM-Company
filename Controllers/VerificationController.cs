@@ -1,5 +1,9 @@
 using System.Data;
+using System.Net;
+using System.Security.Claims;
 using Company_CRM.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Company_CRM.Controllers;
@@ -8,6 +12,11 @@ public class VerificationController : Controller
 {
     private readonly SneakerFactoryContext _sneakerFactoryContext;
 
+    public VerificationController(SneakerFactoryContext sneakerFactoryContext)
+    {
+        _sneakerFactoryContext = sneakerFactoryContext;
+    }
+
     [HttpGet]
     public IActionResult Register()
     {
@@ -15,14 +24,16 @@ public class VerificationController : Controller
     }
     
     [HttpPost]
-    public IActionResult Register(Employee empl)
+    public IActionResult Register(Employee? empl)
     {
         if (empl is null)
             return BadRequest("Пустой сотрудник");
         if (string.IsNullOrEmpty(empl.Login) || string.IsNullOrEmpty(empl.FirstName) || string.IsNullOrEmpty(empl.SecondName))
             return BadRequest("Вы не ввели логин");
+        
         using (_sneakerFactoryContext)
         {
+            //Добавить правильное добавления пароля здесь Солью лучше сделать дату добавления сотрудника!!
             if (!_sneakerFactoryContext.Employees.Any(u =>
                     u.FirstName == empl.FirstName && u.SecondName == empl.SecondName))
             {
@@ -37,14 +48,29 @@ public class VerificationController : Controller
                     FactoryRole = empl.FactoryRole + _sneakerFactoryContext.Employees.Count(x => x.FactoryRole != null && x.FactoryRole.Contains(empl.FactoryRole)),
                     Login = empl.Login
                 });
+                _sneakerFactoryContext.SaveChanges();
             }
         }
-        return View();
+        
+        var claims = new List<Claim>()
+        {
+            new Claim(ClaimTypes.Name, empl.Login),
+            new Claim(ClaimTypes.Role, empl.FactoryRole),
+            new Claim(ClaimTypes.Surname, empl.SecondName),
+            new Claim(ClaimTypes.MobilePhone, empl.Phone),
+            new Claim(ClaimTypes.Email, empl.Email),
+            new Claim(ClaimTypes.StreetAddress, empl.Address),
+        };
+        ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Cookie");
+        ControllerContext.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+            new ClaimsPrincipal(claimsIdentity));
+        
+        return RedirectToAction("Auth");
     }
-
-    [HttpGet]
+    
     public IActionResult Auth()
     {
+        var user = ControllerContext.HttpContext.User.Identity;
         return View();
     }
 }

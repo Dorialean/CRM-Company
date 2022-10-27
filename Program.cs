@@ -1,4 +1,5 @@
 using Company_CRM.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 string connectionStrings = builder.Configuration.GetConnectionString("LaptopConnectionString");
 builder.Services.AddDbContext<SneakerFactoryContext>(options => options.UseNpgsql(connectionStrings));
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Verification/Register";
+    });
+
 
 var app = builder.Build();
 
