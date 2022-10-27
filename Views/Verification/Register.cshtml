@@ -1,0 +1,46 @@
+@model Employee
+
+@{
+    ViewBag.Title = "Регистрация";
+    Layout = "_Layout";
+}
+
+<div class="row"></div>
+<h1 class="row">Регистрация</h1>
+<div class="container rounded">
+    @using (Html.BeginForm("Register", "Verification", FormMethod.Post, new { @Class = "row", @id = "register" }))
+    {
+        <div class="col col-3">
+            @Html.TextBoxFor(m => m.FirstName,
+                new { @Class = "form-control mb-2", @Placeholder = "Имя", @id = "FirstName" })
+            @Html.TextBoxFor(m => m.SecondName,
+                new { @Class = "form-control mb-2", @Placeholder = "Фамилия", @id = "SecondName" })
+            @Html.TextBoxFor(m => m.FatherName,
+                new { @Class = "form-control mb-2", @Placeholder = "Отчество", @id = "FatherName" })
+            @Html.TextBoxFor(m => m.Phone,
+                new { @Class = "form-control mb-2", @Placeholder = "Телефон", @id = "Phone" })
+            @Html.TextBoxFor(m => m.Address,
+                new { @Class = "form-control mb-2", @Placeholder = "Адрес", @id = "Address" })
+            <br/><br/>
+            <input type="submit" value="Отправить"/>
+        </div>
+        <div class="col"></div>
+        <div class="col col-3">
+            @Html.TextBoxFor(m => m.Email,
+                new { @Class = "form-control mb-2", @Placeholder = "Email", @id = "Email" })
+            @Html.DropDownListFor(m => m.FactoryRole, new List<SelectListItem>
+            {
+                new SelectListItem { Text = "Менеджер", Value = "MAN" },
+                new SelectListItem { Text = "Работяга", Value = "EMP", Selected = true }
+            }, new { @Class = "form-control mb-2", @id = "Role" })
+            @Html.TextBoxFor(m => m.Login,
+                new { @Class = "form-control mb-2", @Placeholder = "Логин", @id = "Login" })
+            @Html.PasswordFor(m => m.Password,
+                new { @Class = "form-control mb-2", @Placeholder = "Пароль", @id = "Password" })
+        </div>
+        <div class="col-2"></div>
+        <div class="col col-3" align="center">
+            <img src="~/img/employee.png" style="max-height: 100%; max-width: 100%" asp-append-version="true"/>
+        </div>
+    }
+</div>
