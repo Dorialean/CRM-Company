@@ -1,7 +1,12 @@
+using Company_CRM.Models;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+string connectionStrings = builder.Configuration.GetConnectionString("LaptopConnectionString");
+builder.Services.AddDbContext<SneakerFactoryContext>(options => options.UseNpgsql(connectionStrings));
 
 var app = builder.Build();
 
@@ -26,6 +31,6 @@ app.MapControllerRoute(
 
 app.MapControllerRoute(
     name: "registration",
-    pattern: "{controller=Register}/{action=Index}");
+    pattern: "{controller=Verification}/{action=Index}");
 
 app.Run();
