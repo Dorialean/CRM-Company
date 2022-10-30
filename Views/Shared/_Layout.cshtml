@@ -49,14 +49,29 @@
                 </ul>
             </div>
             <div class="col">
-                <a asp-action="Auth" asp-controller="Verification">
-                    <p class="btn-success 
-                              rounded-1 
+                @if (Context.User.Identity.IsAuthenticated)
+                {
+                    <a asp-action="EmployeeSpace" asp-controller="Work">
+                        <p class="btn-success
+                              rounded-1
+                              text-nowrap
+                              text-center
+                              fs-3
+                              fw-normal">Личный кабинет</p>
+                    </a>
+                }
+                else
+                {
+                    <a asp-action="Auth" asp-controller="Verification">
+                        <p class="btn-success
+                              rounded-1
                               text-nowrap
                               text-center
                               fs-3
                               fw-normal">Войти</p>
-                </a>
+                    </a>
+                }
+                
             </div>
         </nav>
     </header>
