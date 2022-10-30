@@ -1,12 +1,19 @@
 using Company_CRM.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.InteropServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-string connectionStrings = builder.Configuration.GetConnectionString("LaptopConnectionString");
+string connectionStrings;
+if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+    connectionStrings = builder.Configuration.GetConnectionString("LaptopConnectionString");
+else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+    connectionStrings = builder.Configuration.GetConnectionString("WindowsConntectionString");
+else
+    connectionStrings = null; // Илья, добавь в appsettings.Development свою строку подключения к postgresql
 builder.Services.AddDbContext<SneakerFactoryContext>(options => options.UseNpgsql(connectionStrings));
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
