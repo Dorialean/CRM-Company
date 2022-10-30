@@ -25,6 +25,7 @@ namespace Company_CRM.Models
         public string? Login { get; set; }
         public byte[]? Password { get; set; }
         public string? SaltPass { get; set; }
+        public DateTime Hired { get; set; } = DateTime.Now;
 
         public virtual ICollection<Job> JobCreatorEmpls { get; set; }
         public virtual ICollection<Job> JobExecutorEmpls { get; set; }

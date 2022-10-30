@@ -1,7 +1,24 @@
 @page
-@model Company_CRM.Views.Verification.Auth
+@model UserInfo
 
 @{
     ViewData["Title"] = "Авторизация";
     Layout = "_Layout";
 }
+
+<div class="row">
+    <div class="col-8">
+        <p class="row"><strong>Войдите в свой аккаунт</strong></p>
+        @Html.BeginForm("Auth","Verification",FormMethod.Post, new {@class="row"})
+        {
+            @Html.TextBoxFor(l => l.Login);
+            @Html.PasswordFor(p => p.Password);
+        
+            <input class="btn btn-primary" type="submit" value="Войти" />
+        }
+    </div>
+    <div class="col">
+        <p>Для того, чтобы продолжить, пожалуйста, введите данные для авторизации.</p>
+        <img src="#">
+    </div>
+</div>

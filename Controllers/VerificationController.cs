@@ -69,9 +69,17 @@ public class VerificationController : Controller
         return RedirectToAction("Auth");
     }
     
-    public IActionResult Auth()
+    public IActionResult Auth(UserInfo userInfo)
     {
         var user = ControllerContext.HttpContext.User.Identity;
+        if (string.IsNullOrEmpty(userInfo.Login))
+            return BadRequest("Вы не ввели логин");
+        if (string.IsNullOrEmpty(userInfo.Password))
+            return BadRequest("Вы не ввели пароль");
+        //Здесь надо добавить хэширование и соление пароля
+        using (_sneakerFactoryContext)
+        {
+        }
         return View();
     }
 }
