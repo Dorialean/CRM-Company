@@ -45,7 +45,8 @@ public class VerificationController : Controller
                     Phone = empl.Phone,
                     Email = empl.Email,
                     Address = empl.Address,
-                    FactoryRole = empl.FactoryRole + _sneakerFactoryContext.Employees.Count(x => x.FactoryRole != null && x.FactoryRole.Contains(empl.FactoryRole)),
+                    FactoryRole = empl.FactoryRole + (_sneakerFactoryContext.Employees.Count(x =>
+                        x.FactoryRole != null && x.FactoryRole.Contains(empl.FactoryRole))+1),
                     Login = empl.Login
                 });
                 _sneakerFactoryContext.SaveChanges();
