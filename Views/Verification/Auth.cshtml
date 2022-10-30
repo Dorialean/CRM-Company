@@ -2,23 +2,25 @@
 @model UserInfo
 
 @{
-    ViewData["Title"] = "Авторизация";
+    ViewBag.Title = "Авторизация";
     Layout = "_Layout";
 }
 
 <div class="row">
     <div class="col-8">
         <p class="row"><strong>Войдите в свой аккаунт</strong></p>
-        @Html.BeginForm("Auth","Verification",FormMethod.Post, new {@class="row"})
-        {
-            @Html.TextBoxFor(l => l.Login);
-            @Html.PasswordFor(p => p.Password);
+        @using(Html.BeginForm("Auth","Verification",FormMethod.Post, new {@class="row"})){
+            @Html.TextBoxFor(l => l.Login , new {@placeholder="Введите логин"})
+            @Html.PasswordFor(p => p.Password, new {@placeholder="Введите пароль"})
         
             <input class="btn btn-primary" type="submit" value="Войти" />
         }
     </div>
     <div class="col">
         <p>Для того, чтобы продолжить, пожалуйста, введите данные для авторизации.</p>
-        <img src="#">
+        <img src="~/img/employee2.png" asp-append-version="true">
     </div>
+    <a class="link-primary" asp-action="Register" asp-controller="Verification">
+        Не зарегестрированы?
+    </a>
 </div>

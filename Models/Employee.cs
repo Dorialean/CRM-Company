@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -25,6 +26,7 @@ namespace Company_CRM.Models
         public string? Login { get; set; }
         public byte[]? Password { get; set; }
         public string? SaltPass { get; set; }
+        [Column("hired", TypeName="timestamp")]
         public DateTime Hired { get; set; } = DateTime.Now;
 
         public virtual ICollection<Job> JobCreatorEmpls { get; set; }
