@@ -30,6 +30,9 @@ public class VerificationController : Controller
     [HttpPost]
     public IActionResult Register(UserInfo? empl)
     {
+        if (!ModelState.IsValid)
+            return View();
+        
         if (empl is null)
             return BadRequest("Пустой сотрудник");
         if (string.IsNullOrEmpty(empl.Login) ||
@@ -53,27 +56,24 @@ public class VerificationController : Controller
     [HttpPost]
     public IActionResult Auth(UserInfo userInfo)
     {
-        if (string.IsNullOrEmpty(userInfo.Login))
-            return BadRequest("Вы не ввели логин");
-        if (string.IsNullOrEmpty(userInfo.Password))
-            return BadRequest("Вы не ввели пароль");
-
+        if (!ModelState.IsValid)
+            return View(userInfo);
         using (_sneakerFactoryContext)
-        {
-            var empl = _sneakerFactoryContext.Employees.FirstOrDefault(u => u.Login == userInfo.Login);
-            if (empl is not null)
             {
-                if (empl.Password.SequenceEqual(GeneratePassword(userInfo.Password, empl.Hired)))
+                var empl = _sneakerFactoryContext.Employees.FirstOrDefault(u => u.Login == userInfo.Login);
+                if (empl is not null)
                 {
-                    GenerateIdentityClaims(empl);
-                    return View();
+                    if (empl.Password.SequenceEqual(GeneratePassword(userInfo.Password, empl.Hired)))
+                    {
+                        GenerateIdentityClaims(empl);
+                        return View();
+                    }
+                    else
+                        return BadRequest("Неравильный пароль");
                 }
                 else
-                    return BadRequest("Неравильный пароль");
+                    return BadRequest("Вы не зарегистрированы");
             }
-            else
-                return BadRequest("Вы не зарегистрированы");
-        }
 
         return View();
     }

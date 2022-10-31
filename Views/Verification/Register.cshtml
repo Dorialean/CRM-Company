@@ -18,6 +18,7 @@
                 new { @Class = "form-control mb-2", @Placeholder = "Отчество", @id = "FatherName" })
             @Html.TextBoxFor(m => m.Phone,
                 new { @Class = "form-control mb-2", @Placeholder = "Телефон", @id = "Phone" })
+            @Html.ValidationMessageFor(m => m.Phone)
             @Html.TextBoxFor(m => m.Address,
                 new { @Class = "form-control mb-2", @Placeholder = "Адрес", @id = "Address" })
             <br/><br/>
@@ -27,6 +28,7 @@
         <div class="col col-3">
             @Html.TextBoxFor(m => m.Email,
                 new { @Class = "form-control mb-2", @Placeholder = "Email", @id = "Email" })
+            @Html.ValidationMessageFor(m => m.Email)
             @Html.DropDownListFor(m => m.FactoryRole, new List<SelectListItem>
             {
                 new SelectListItem { Text = "Менеджер", Value = "MAN" },
@@ -34,8 +36,10 @@
             }, new { @Class = "form-control mb-2", @id = "Role" })
             @Html.TextBoxFor(m => m.Login,
                 new { @Class = "form-control mb-2", @Placeholder = "Логин", @id = "Login" })
+            @Html.ValidationMessageFor(m => m.Login)
             @Html.PasswordFor(m => m.Password,
                 new { @Class = "form-control mb-2", @Placeholder = "Пароль", @id = "Password" })
+            @Html.ValidationMessageFor(m => m.Password)
         </div>
         <div class="col-2"></div>
         <div class="col col-3" align="center">
@@ -46,5 +50,4 @@
 
 @section Scripts {
     <link href="~/css/register.css" rel="stylesheet" type="text/css"  asp-append-version="true"/>
-    <script src="~/js/validation.js" asp-append-version="true"></script>
 }
