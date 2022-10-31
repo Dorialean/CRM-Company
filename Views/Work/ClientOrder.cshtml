@@ -1,3 +1,41 @@
-﻿@{
+﻿@model ClientOrderInfo
+@{
     Layout = "_Layout";
+    ViewBag.Title = "Сделать заказ";
 }
+
+<div class="row">
+    <h1 class="row">Форма оформления заказа</h1>
+    @using(Html.BeginForm("ClientOrder","Work",FormMethod.Post, new { @class="col" }))
+    {
+        @Html.Label("Имя")
+        @Html.TextBoxFor(fn => fn.FirstName, new { @placeholder="Введите имя заказчика", @class="row mt-1 mt-1"} )
+        @Html.Label("Фамилия")
+        @Html.TextBoxFor(sn => sn.SecondName, new { @placeholder="Введите фамилию заказчика", @class="row mt-1 mb-1"})
+        @Html.Label("Название организации*")
+        @Html.TextBoxFor(on => on.OrganisationName, new { @placeholder="Введите название организации заказчика", @class="row mt-1 mb-1"})
+        @Html.Label("Номер телефона")
+        @Html.TextBoxFor(p => p.Phone, null, new { type="phone", @placeholder="Введите номер телефона", @class="row mt-1 mb-1"})
+        @Html.Label("Электронная почта")
+        @Html.TextBoxFor(e => e.Email, new{ type="email", @placeholder="Введите электронную почту" , @class="row mt-1 mb-1"})
+        @Html.Label("Дата, к которой всё должно быть готово")
+        @Html.TextBoxFor(d => d.ContractInfo.Deadline,new{type="date" , @class="row mt-1 mb-1"})
+        @Html.Label("Выберите сколько и каких кроссовок нужно*")
+        <div class="row rounded-2 border-dark border-5 btn-light">
+            @foreach (Sneaker sneaker in ViewBag.Sneakers)
+            {
+                <div class="col-10">
+                    <p class="row"><strong>@sneaker.Model</strong></p>
+                    <p class="row">@sneaker.Weight</p>
+                </div>
+                @Html.EditorFor(model => model.SneakerIdToValue[sneaker.SneakerId.ToString()], new { @class="col", @min="0", @type="number", htmlAttributes=new { @id=sneaker.SneakerId.ToString() } })
+            }
+        </div>
+        @Html.Label("Дата встречи, если требуется.")
+        @Html.TextBoxFor(m => m.Meeting, new {type="date", @class="row mt-1 mb-1"})
+        @Html.Label("Адрес вашей компании")
+        @Html.TextBoxFor(a => a.Address, new{ @class="row mt-1 mb-1" })
+        <p class="row">Убедитесь, что все обязательные поля с '*' заполнены.</p>
+        <input class="row mt-2" type="submit" value="Создать заказ"/>
+    }
+</div>

@@ -1,0 +1,22 @@
+﻿@model ClientContracts
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Информация о заказе";
+    var contracts = Model.Contracts;
+    var sneakerModels = Model.Sneakers.Select(s => s.Model).Distinct().ToArray();
+}
+
+<div class="row">
+    <h1>СДЕЛАЙТЕ СКРИНШОТ ДАННОЙ СТРАНИЦЫ - ЭТО ВАШ ЧЕК</h1>
+    @*нет разницы какой взять элемент из массива почти все значения, кроме sneaker id будут одинаковые*@
+    <p class="row">Ваш id: @contracts[0].ClientId.ToString()</p>
+    <p class="row">Дата заказа: @contracts[0].SignDate.ToString()</p>
+    <p class="row">Дедлайн: @contracts[0].Deadline.ToString()</p>
+    <div class="row">
+        @foreach (var mod in sneakerModels)
+        {
+            <p class="row">@mod : @contracts.Count(x => x.Sneaker.Model == mod)</p>
+        }
+    </div>
+    <p class="row">Количество заказанных кроссовок:@contracts.Count()</p>
+</div>
