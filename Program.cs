@@ -13,7 +13,7 @@ if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
     connectionStrings = builder.Configuration.GetConnectionString("WindowsConntectionString");
 else
-    connectionStrings = null; // Илья, добавь в appsettings.Development свою строку подключения к postgresql
+    connectionStrings = builder.Configuration.GetConnectionString("MacConntectionString");
 builder.Services.AddDbContext<SneakerFactoryContext>(options => options.UseNpgsql(connectionStrings));
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
