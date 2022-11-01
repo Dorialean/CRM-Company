@@ -1,6 +1,60 @@
-﻿@{
+﻿@model ManagersInfo
+@{
     Layout = "_Layout";
     ViewBag.Title = "Ваш личный кабинет";
+    var contracts = Model.Contracts;
+    var jobs = Model.Jobs;
+    var avClients = Model.AvailableClients;
+    var ptClients = Model.PotentialClients;
+    var employees = Model.Employees;
+    var sneakers = Model.Sneakers;
 }
 
+<div class="row">
 
+    <label class="row h1">Контракты:</label>
+    <div class="row rounded alert alert-success" data-bs-spy="scroll">
+        @foreach (AvailableClient client in avClients)
+        {
+            var clientContracts = contracts.Where(c => c.ClientId == client.ClientId).Select(c => c).ToList();
+            var potClient = ptClients.First(pc => pc.ClientId == client.ClientId);
+            Dictionary<string, string> sneakerModelToAmount = (from clc in clientContracts
+                                                               join sn in sneakers on clc.SneakerId equals sn.SneakerId
+                                                               select new { Key = sn.Model, Value = clientContracts.Count(c => c.SneakerId == sn.SneakerId).ToString() }).ToDictionary(item => item.Key, item => item.Value);
+            <div class="col-10 btn-light">
+                <p class="row">@client.OrganisationName : @clientContracts.Count()</p>
+                @if (potClient.Meeting is not null)
+                {
+                    <p class="row">Встреча назначена на @potClient.Meeting.ToString()</p>
+                }
+                @if (clientContracts.Any(clc => clc.Deadline is not null))
+                {
+                    <p>Заказ должен быть готов к: @clientContracts[0].Deadline</p>
+                }
+                <div class="row alert alert-primary" data-bs-spy="scroll">
+                    @foreach (var sneakerModel in sneakerModelToAmount.Keys)
+                    {
+                        <p class="row">@sneakerModel : @sneakerModelToAmount[sneakerModel]</p>
+                    }
+                </div>
+            </div>
+            <button class="col btn btn-success m-2">Добавить задание</button>
+        }
+    </div>
+    @*
+        Здесь надо добавить логику добавления задания
+    *@
+    <div class="row alert alert-success">
+        <input class="col-8" type="text" placeholder="Введите что-то о клиенте"/>
+        <button class="col btn btn-primary ms-1">Найти клиента</button>
+    </div>
+    <div class="row">
+        <p class="row"> Отчётность:</p>
+        <div class="row alert alert-success">
+            <button class="col-3 btn btn-success">Отчёт по работникам</button>
+            <p class="col text-center"><-- Выберите вид отчёта --></p>
+            <button class="col-3 btn btn-success">Отчёт по заданиям</button>
+        </div>
+    </div>
+    <a class="row btn btn-danger" asp-action="Logout" asp-controller="Verification">Выйти из системы</a>
+</div>

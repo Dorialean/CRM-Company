@@ -22,7 +22,31 @@ namespace Company_CRM.Controllers
         [Authorize(Roles = Role.Manager)]
         public IActionResult ManagerSpace()
         {
-            return View();
+            List<PotentialClient> allPotentialClient;
+            List<AvailableClient> allAvailableClient;
+            List<Employee> allEmployees;
+            List<Job> allJobs;
+            List<Contract> allContracts;
+            List<Sneaker> allSneakers;
+
+            using (_sneakerFactoryContext)
+            {
+                allContracts = _sneakerFactoryContext.Contracts.ToList();
+                allJobs = _sneakerFactoryContext.Jobs.ToList();
+                allEmployees = _sneakerFactoryContext.Employees.ToList();
+                allAvailableClient = _sneakerFactoryContext.AvailableClients.ToList();
+                allPotentialClient = _sneakerFactoryContext.PotentialClients.ToList();
+                allSneakers = _sneakerFactoryContext.Sneakers.ToList();
+            }
+            return View(new ManagersInfo()
+            {
+                AvailableClients = allAvailableClient,
+                Employees = allEmployees,
+                Jobs = allJobs,
+                Contracts = allContracts,
+                PotentialClients = allPotentialClient,
+                Sneakers = allSneakers
+            });
         }
 
 
