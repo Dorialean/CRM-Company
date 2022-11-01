@@ -386,7 +386,7 @@ namespace Company_CRM.Migrations
             modelBuilder.Entity("Company_CRM.Models.Job", b =>
                 {
                     b.HasOne("Company_CRM.Models.Contract", "Contr")
-                        .WithMany("Jobs")
+                        .WithMany("EmployeeJobs")
                         .HasForeignKey("ContrId")
                         .HasConstraintName("jobs_contr_id_fkey");
 
@@ -418,7 +418,7 @@ namespace Company_CRM.Migrations
                 {
                     b.Navigation("AvailableClients");
 
-                    b.Navigation("Jobs");
+                    b.Navigation("EmployeeJobs");
                 });
 
             modelBuilder.Entity("Company_CRM.Models.Employee", b =>

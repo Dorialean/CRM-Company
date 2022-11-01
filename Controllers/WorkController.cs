@@ -1,6 +1,7 @@
 ﻿using Company_CRM.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace Company_CRM.Controllers
 {
@@ -13,12 +14,54 @@ namespace Company_CRM.Controllers
             _sneakerFactoryContext = sneakerFactoryContext;
         }
 
-        [Authorize]
-        [HttpGet]
+        [Authorize(Roles = Role.Employee)]
         public IActionResult EmployeeSpace()
         {
-            return View();
+            var employee = _sneakerFactoryContext.Employees.First(e => e.Login == User.Identity.Name);
+            List<Job> emplJobs;
+            List<Employee> allEmployees;
+            using (_sneakerFactoryContext)
+            {
+                emplJobs = _sneakerFactoryContext.Jobs.Where(j => j.ExecutorEmplId == employee.EmployeeId).Select(j => j).ToList();
+                allEmployees = _sneakerFactoryContext.Employees.ToList();
+            }
+            return View(new EmployeesInfo() 
+            { 
+                EmployeeJobs = emplJobs, 
+                Employees = allEmployees
+            });
         }
+
+        [Authorize(Roles = Role.Manager)]
+        public IActionResult ManagerSpace()
+        {
+            List<PotentialClient> allPotentialClient;
+            List<AvailableClient> allAvailableClient;
+            List<Employee> allEmployees;
+            List<Job> allJobs;
+            List<Contract> allContracts;
+            List<Sneaker> allSneakers;
+
+            using (_sneakerFactoryContext)
+            {
+                allContracts = _sneakerFactoryContext.Contracts.ToList();
+                allJobs = _sneakerFactoryContext.Jobs.ToList();
+                allEmployees = _sneakerFactoryContext.Employees.ToList();
+                allAvailableClient = _sneakerFactoryContext.AvailableClients.ToList();
+                allPotentialClient = _sneakerFactoryContext.PotentialClients.ToList();
+                allSneakers = _sneakerFactoryContext.Sneakers.ToList();
+            }
+            return View(new ManagersInfo()
+            {
+                AvailableClients = allAvailableClient,
+                Employees = allEmployees,
+                Jobs = allJobs,
+                Contracts = allContracts,
+                PotentialClients = allPotentialClient,
+                Sneakers = allSneakers
+            });
+        }
+
 
         [HttpGet]
         public IActionResult ClientOrder()

@@ -24,12 +24,9 @@
             <p class="text-center">Для того, чтобы продолжить, пожалуйста, введите данные для авторизации.</p>
             <input class="btn btn-primary m-2 mx-auto" style="max-width: 250px" type="submit" value="Войти"/>
         }
-
-        @using (Html.BeginForm("Register", "Verification", FormMethod.Get, new { @class = "row", @style = "width: 104%" }))
-        {
-            <input class="btn btn-secondary m-2 mx-auto" style="max-width: 250px" type="submit" value="Зарегистрироваться"/>
-        }
-
+       <a asp-action="Register" asp-controller="Verification" class="btn btn-secondary m-2 mx-auto" style="max-width: 250px" type="submit">
+           Зарегистрироваться
+       </a>
     </div>
     <div class="col-1"></div>
     <div class="col p-3 btn-group-vertical text-center">
