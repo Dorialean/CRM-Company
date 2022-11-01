@@ -1,6 +1,7 @@
 ﻿using Company_CRM.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace Company_CRM.Controllers
 {
@@ -16,7 +17,19 @@ namespace Company_CRM.Controllers
         [Authorize(Roles = Role.Employee)]
         public IActionResult EmployeeSpace()
         {
-            return View();
+            var employee = _sneakerFactoryContext.Employees.First(e => e.Login == User.Identity.Name);
+            List<Job> emplJobs;
+            List<Employee> allEmployees;
+            using (_sneakerFactoryContext)
+            {
+                emplJobs = _sneakerFactoryContext.Jobs.Where(j => j.ExecutorEmplId == employee.EmployeeId).Select(j => j).ToList();
+                allEmployees = _sneakerFactoryContext.Employees.ToList();
+            }
+            return View(new EmployeesInfo() 
+            { 
+                EmployeeJobs = emplJobs, 
+                Employees = allEmployees
+            });
         }
 
         [Authorize(Roles = Role.Manager)]
