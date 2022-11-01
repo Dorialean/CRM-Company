@@ -56,26 +56,28 @@ public class VerificationController : Controller
     [HttpPost]
     public IActionResult Auth(UserInfo userInfo)
     {
-        if (!ModelState.IsValid)
-            return View(userInfo);
         using (_sneakerFactoryContext)
+        {
+            var empl = _sneakerFactoryContext.Employees.FirstOrDefault(u => u.Login == userInfo.Login);
+            if (empl is not null)
             {
-                var empl = _sneakerFactoryContext.Employees.FirstOrDefault(u => u.Login == userInfo.Login);
-                if (empl is not null)
+                if (empl.Password.SequenceEqual(GeneratePassword(userInfo.Password, empl.Hired)))
                 {
-                    if (empl.Password.SequenceEqual(GeneratePassword(userInfo.Password, empl.Hired)))
-                    {
-                        GenerateIdentityClaims(empl);
-                        return View();
-                    }
-                    else
-                        return BadRequest("Неравильный пароль");
+                    GenerateIdentityClaims(empl);
+                    return User.IsInRole(Role.Manager) ? RedirectToAction("ManagerSpace", "Work") : RedirectToAction("EmployeeSpace", "Work");
                 }
                 else
-                    return BadRequest("Вы не зарегистрированы");
+                    return BadRequest("Неравильный пароль");
             }
+            else
+                return BadRequest("Вы не зарегистрированы");
+        }
+    }
 
-        return View();
+    public async Task<IActionResult> Logout()
+    {
+        await ControllerContext.HttpContext.SignOutAsync();
+        return RedirectToAction("Index", "Home");
     }
 
     private byte[] GeneratePassword(string inputedPassword, DateTime hiredDate)
@@ -92,10 +94,15 @@ public class VerificationController : Controller
 
     private async Task GenerateIdentityClaims(UserInfo? empl)
     {
+        string role;
+        if (empl.FactoryRole.StartsWith("MAN"))
+            role = Role.Manager;
+        else
+            role = Role.Employee;
         var claims = new List<Claim>()
         {
             new Claim(ClaimTypes.Name, empl.Login),
-            new Claim(ClaimTypes.Role, empl.FactoryRole),
+            new Claim(ClaimTypes.Role, role),
             new Claim(ClaimTypes.Surname, empl.SecondName),
             new Claim(ClaimTypes.MobilePhone, empl.Phone),
             new Claim(ClaimTypes.Email, empl.Email),
@@ -107,10 +114,15 @@ public class VerificationController : Controller
     }
     private async Task GenerateIdentityClaims(Employee? empl)
     {
+        string role;
+        if (empl.FactoryRole.StartsWith("MAN"))
+            role = Role.Manager;
+        else
+            role = Role.Employee;
         var claims = new List<Claim>()
         {
             new Claim(ClaimTypes.Name, empl.Login),
-            new Claim(ClaimTypes.Role, empl.FactoryRole),
+            new Claim(ClaimTypes.Role, role),
             new Claim(ClaimTypes.Surname, empl.SecondName),
             new Claim(ClaimTypes.MobilePhone, empl.Phone),
             new Claim(ClaimTypes.Email, empl.Email),

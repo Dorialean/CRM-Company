@@ -13,12 +13,18 @@ namespace Company_CRM.Controllers
             _sneakerFactoryContext = sneakerFactoryContext;
         }
 
-        [Authorize]
-        [HttpGet]
+        [Authorize(Roles = Role.Employee)]
         public IActionResult EmployeeSpace()
         {
             return View();
         }
+
+        [Authorize(Roles = Role.Manager)]
+        public IActionResult ManagerSpace()
+        {
+            return View();
+        }
+
 
         [HttpGet]
         public IActionResult ClientOrder()

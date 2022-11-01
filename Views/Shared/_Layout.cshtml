@@ -49,29 +49,39 @@
                 </ul>
             </div>
             <div class="col">
-                @if (Context.User.Identity.IsAuthenticated)
+                @if(User.IsInRole(Role.Manager))
+                {
+                    <a asp-action="ManagerSpace" asp-controller="Work">
+                        <p class="btn-success
+                                rounded-1
+                                text-nowrap
+                                text-center
+                                fs-3
+                                fw-normal">Личный кабинет</p>
+                    </a>
+                }
+                else if (User.IsInRole(Role.Employee))
                 {
                     <a asp-action="EmployeeSpace" asp-controller="Work">
                         <p class="btn-success
-                              rounded-1
-                              text-nowrap
-                              text-center
-                              fs-3
-                              fw-normal">Личный кабинет</p>
+                                rounded-1
+                                text-nowrap
+                                text-center
+                                fs-3
+                                fw-normal">Личный кабинет</p>
                     </a>
                 }
                 else
                 {
                     <a asp-action="Auth" asp-controller="Verification">
                         <p class="btn-success
-                              rounded-1
-                              text-nowrap
-                              text-center
-                              fs-3
-                              fw-normal">Войти</p>
+                            rounded-1
+                            text-nowrap
+                            text-center
+                            fs-3
+                            fw-normal">Войти</p>
                     </a>
                 }
-                
             </div>
         </nav>
     </header>

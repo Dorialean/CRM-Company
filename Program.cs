@@ -1,5 +1,6 @@
 using Company_CRM.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices;
 
@@ -18,7 +19,8 @@ builder.Services.AddDbContext<SneakerFactoryContext>(options => options.UseNpgsq
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Verification/Register";
+        options.LoginPath = "/Verification/Auth";
+        options.LogoutPath = "/Verification/Logout";
     });
 
 
@@ -37,6 +39,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
