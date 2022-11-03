@@ -16,13 +16,11 @@
         {
             @Html.TextBoxFor(l => l.Login,
                 new { @placeholder = "Введите логин", @class = "form-control-lg", @id="login" })
-            @Html.ValidationMessageFor(m => m.Login)
             @Html.PasswordFor(p => p.Password,
                 new { @placeholder = "Введите пароль", @class = "mt-2 form-control-lg", @id="pass" })
-            @Html.ValidationMessageFor(m => m.Password)
             
             <p class="text-center">Для того, чтобы продолжить, пожалуйста, введите данные для авторизации.</p>
-            <input class="btn btn-primary m-2 mx-auto" style="max-width: 250px" type="submit" value="Войти"/>
+            <input id="auth" class="btn btn-primary m-2 mx-auto" style="max-width: 250px" type="submit" value="Войти" />
         }
        <a asp-action="Register" asp-controller="Verification" class="btn btn-secondary m-2 mx-auto" style="max-width: 250px" type="submit">
            Зарегистрироваться
@@ -36,5 +34,5 @@
 
 
 @section Scripts {
-    
+    <script src="~/js/AuthValidation.js"></script>
 }
