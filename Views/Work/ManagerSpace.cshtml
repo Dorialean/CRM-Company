@@ -53,8 +53,12 @@
         <div class="row alert alert-success">
             <button class="col-3 btn btn-success">Отчёт по работникам</button>
             <p class="col text-center"><-- Выберите вид отчёта --></p>
-            <button class="col-3 btn btn-success">Отчёт по заданиям</button>
+            <button id="job_report" class="col-3 btn btn-success">Отчёт по заданиям</button>
         </div>
     </div>
     <a class="row btn btn-danger" asp-action="Logout" asp-controller="Verification">Выйти из системы</a>
 </div>
+
+@section Scripts{
+    <script src="~/js/JobsReport.js"></script>
+}
