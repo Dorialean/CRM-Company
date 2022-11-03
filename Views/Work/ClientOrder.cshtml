@@ -33,12 +33,13 @@
         <div class="row rounded-2 btn-light">
             @foreach (Sneaker sneaker in ViewBag.Sneakers)
             {
+                var pairWeight = sneaker.Weight.Value * 2;
+
                 <div class="col-10">
                     <p class="row"><strong>@sneaker.Model</strong></p>
-                    @{var pairWeight = sneaker.Weight.Value * 2;}
                     <p class="row ms-3">Вес одной пары составит: @pairWeight</p>
                 </div>
-                @Html.TextBoxFor(model => model.SneakerIdToValue[sneaker.SneakerId.ToString()], new { @class="col", @min="0", @step="1", @type="number", @max="30", htmlAttributes = new { @id=sneaker.SneakerId.ToString() } })
+                @Html.TextBoxFor(model => model.SneakerIdToValue[sneaker.SneakerId.ToString()], new { @class="col", @min="0", @step="1", @type="number", @max="30",  @id=sneaker.SneakerId.ToString() })
                 @Html.ValidationMessageFor(model => model.SneakerIdToValue, "", new { @style="font-size: 10px"})
             }
         </div>

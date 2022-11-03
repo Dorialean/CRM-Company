@@ -14,10 +14,10 @@
         }
     }, function () {
         if (loginTextBox.val()) {
-            loginTextBox.removeClass("border-2 border-danger");
+            loginTextBox.removeClass("border-2 border-danger").addClass("border-2 border-success");
         }
         if (passwordBox.val()) {
-            passwordBox.removeClass("border-2 border-danger");
+            passwordBox.removeClass("border-2 border-danger").addClass("border-2 border-success");
         }
     });
     console.log($("#reg"));
