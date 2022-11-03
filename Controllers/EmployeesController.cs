@@ -40,7 +40,7 @@ namespace Company_CRM.Controllers
                 using (var cmd = new NpgsqlCommand(query, conn))
                 {
                     NpgsqlDataReader emplQueryRes = await cmd.ExecuteReaderAsync();
-
+                    //Выдаёт неправильно спаршенные строки
                     var r = Serialize(emplQueryRes);
                     json = JsonConvert.SerializeObject(r, Formatting.Indented);
                 }
