@@ -18,6 +18,7 @@ namespace Company_CRM.Models
         public int ClientId { get; set; }
         public int SneakerId { get; set; }
         public DateTime SignDate { get; set; }
+        [Required(ErrorMessage = "Поле обязательно к заполнению")]
         public DateTime? Deadline { get; set; }
 
         public virtual AvailableClient Client { get; set; } = null!;
