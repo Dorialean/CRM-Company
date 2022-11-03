@@ -10,17 +10,26 @@
     {
         @Html.Label("Имя")
         @Html.TextBoxFor(fn => fn.FirstName, new { @placeholder="Введите имя заказчика", @class="row mt-1 mt-1"} )
+        
         @Html.Label("Фамилия")
         @Html.TextBoxFor(sn => sn.SecondName, new { @placeholder="Введите фамилию заказчика", @class="row mt-1 mb-1"})
-        @Html.Label("Название организации*")
+        
+        @Html.Label("Название организации * ")
+        @Html.ValidationMessageFor(fn => fn.OrganisationName, "", new { @style="font-size: 10px"})
         @Html.TextBoxFor(on => on.OrganisationName, new { @placeholder="Введите название организации заказчика", @class="row mt-1 mb-1"})
+        
         @Html.Label("Номер телефона")
+        @Html.ValidationMessageFor(d => d.Phone, "", new { @style="font-size: 10px"})
         @Html.TextBoxFor(p => p.Phone, null, new { type="phone", @placeholder="Введите номер телефона", @class="row mt-1 mb-1"})
+        
         @Html.Label("Электронная почта")
         @Html.TextBoxFor(e => e.Email, new{ type="email", @placeholder="Введите электронную почту" , @class="row mt-1 mb-1"})
-        @Html.Label("Дата, к которой всё должно быть готово")
+        
+        @Html.Label("Дата, к которой всё должно быть готово * ")
+        @Html.ValidationMessageFor(d => d.ContractInfo.Deadline, "", new { @style="font-size: 10px"})
         @Html.TextBoxFor(d => d.ContractInfo.Deadline,new{type="date" , @class="row mt-1 mb-1"})
-        @Html.Label("Выберите сколько и каких кроссовок нужно*")
+        
+        @Html.Label("Выберите сколько и каких кроссовок нужно *")
         <div class="row rounded-2 border-dark border-5 btn-light">
             @foreach (Sneaker sneaker in ViewBag.Sneakers)
             {
@@ -29,12 +38,16 @@
                     <p class="row">@sneaker.Weight</p>
                 </div>
                 @Html.EditorFor(model => model.SneakerIdToValue[sneaker.SneakerId.ToString()], new { @class="col", @min="0", @type="number", htmlAttributes=new { @id=sneaker.SneakerId.ToString() } })
+                @Html.ValidationMessageFor(model => model.SneakerIdToValue, "", new { @style="font-size: 10px"})
             }
         </div>
-        @Html.Label("Дата встречи, если требуется.")
+        
+        @Html.Label("Дата встречи, если требуется")
         @Html.TextBoxFor(m => m.Meeting, new {type="date", @class="row mt-1 mb-1"})
+        
         @Html.Label("Адрес вашей компании")
         @Html.TextBoxFor(a => a.Address, new{ @class="row mt-1 mb-1" })
+        
         <p class="row">Убедитесь, что все обязательные поля с '*' заполнены.</p>
         <input class="row mt-2" type="submit" value="Создать заказ"/>
     }

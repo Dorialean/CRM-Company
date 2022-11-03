@@ -72,6 +72,13 @@ namespace Company_CRM.Controllers
         [HttpPost]
         public IActionResult ClientOrder(ClientOrderInfo info)
         {
+            if (!ModelState.IsValid)
+            {
+                Console.WriteLine(ModelState.ErrorCount);
+                ViewBag.Sneakers = _sneakerFactoryContext.Sneakers.ToArray();
+                return View(info);
+            }
+            
             Console.WriteLine(info);
             using (_sneakerFactoryContext)
             {
