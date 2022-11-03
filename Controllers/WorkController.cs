@@ -79,7 +79,6 @@ namespace Company_CRM.Controllers
                 return View(info);
             }
             
-            Console.WriteLine(info);
             using (_sneakerFactoryContext)
             {
                 var avClient = new AvailableClient()

@@ -16,7 +16,7 @@
         
         @Html.Label("Название организации * ")
         @Html.ValidationMessageFor(fn => fn.OrganisationName, "", new { @style="font-size: 10px"})
-        @Html.TextBoxFor(on => on.OrganisationName, new { @placeholder="Введите название организации заказчика", @class="row mt-1 mb-1"})
+        @Html.TextBoxFor(on => on.OrganisationName, new { @placeholder="Введите название организации заказчика", @class="row mt-1 mb-1", @id="orgName"})
         
         @Html.Label("Номер телефона")
         @Html.ValidationMessageFor(d => d.Phone, "", new { @style="font-size: 10px"})
@@ -27,17 +27,18 @@
         
         @Html.Label("Дата, к которой всё должно быть готово * ")
         @Html.ValidationMessageFor(d => d.ContractInfo.Deadline, "", new { @style="font-size: 10px"})
-        @Html.TextBoxFor(d => d.ContractInfo.Deadline,new{type="date" , @class="row mt-1 mb-1"})
+        @Html.TextBoxFor(d => d.ContractInfo.Deadline,new{type="date" , @class="row mt-1 mb-1", @id="endDate"})
         
         @Html.Label("Выберите сколько и каких кроссовок нужно *")
-        <div class="row rounded-2 border-dark border-5 btn-light">
+        <div class="row rounded-2 btn-light">
             @foreach (Sneaker sneaker in ViewBag.Sneakers)
             {
                 <div class="col-10">
                     <p class="row"><strong>@sneaker.Model</strong></p>
-                    <p class="row">@sneaker.Weight</p>
+                    @{var pairWeight = sneaker.Weight.Value * 2;}
+                    <p class="row ms-3">Вес одной пары составит: @pairWeight</p>
                 </div>
-                @Html.EditorFor(model => model.SneakerIdToValue[sneaker.SneakerId.ToString()], new { @class="col", @min="0", @type="number", htmlAttributes=new { @id=sneaker.SneakerId.ToString() } })
+                @Html.TextBoxFor(model => model.SneakerIdToValue[sneaker.SneakerId.ToString()], new { @class="col", @min="0", @step="1", @type="number", @max="30", htmlAttributes = new { @id=sneaker.SneakerId.ToString() } })
                 @Html.ValidationMessageFor(model => model.SneakerIdToValue, "", new { @style="font-size: 10px"})
             }
         </div>
@@ -48,7 +49,11 @@
         @Html.Label("Адрес вашей компании")
         @Html.TextBoxFor(a => a.Address, new{ @class="row mt-1 mb-1" })
         
-        <p class="row">Убедитесь, что все обязательные поля с '*' заполнены.</p>
-        <input class="row mt-2" type="submit" value="Создать заказ"/>
+        <p class="row mt-2 h4">Убедитесь, что все обязательные поля с '*' заполнены.</p>
+        <input id="orderSub" class="row mt-1 btn btn-success" type="submit" value="Создать заказ"/>
     }
 </div>
+
+@section Scripts {
+    <script src="~/js/ClientOrderValidation.js"></script>
+}
