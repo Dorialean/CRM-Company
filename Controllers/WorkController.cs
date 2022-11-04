@@ -146,5 +146,10 @@ namespace Company_CRM.Controllers
             }
             
         }
+
+        public IActionResult AppendJob(Contract contract)
+        {
+            return View();
+        }
     }
 }
