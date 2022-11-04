@@ -7,7 +7,9 @@ using System.Runtime.InteropServices;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
 string connectionStrings;
 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
     connectionStrings = builder.Configuration.GetConnectionString("LaptopConnectionString");
