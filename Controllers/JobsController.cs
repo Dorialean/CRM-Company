@@ -26,6 +26,25 @@ namespace Company_CRM.Controllers
         {
             return await _context.Jobs.ToListAsync();
         }
+        
+        [HttpGet("complete")]
+        public async Task<string[]> CompleteJob(int id)
+        {
+            var job = await _context.Jobs.FindAsync(id);
+            job.Completed = DateTime.Now;
+            _context.Jobs.Update(job);
+            _context.SaveChanges();
+
+            var creater = _context.Employees.First(x => x.EmployeeId == job.CreatorEmplId);
+            
+            string name;
+            if (creater.FatherName is not null)
+                name = creater.SecondName + " " + creater.FirstName[0] +". "+ creater.FatherName;
+            else
+                name = creater.SecondName + " " + creater.FirstName;
+
+            return new []{job.JobId.ToString(), name, job.Description, job.Deadline.ToString()};
+        }
 
         // GET: api/Jobs/5
         [HttpGet("{id}")]
@@ -103,5 +122,7 @@ namespace Company_CRM.Controllers
         {
             return _context.Jobs.Any(e => e.JobId == id);
         }
+        
+        
     }
 }
