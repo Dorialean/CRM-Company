@@ -2,8 +2,8 @@
 @{
     Layout = "_Layout";
     ViewBag.Title = "Личный кабинет";
-    var completedJobs = Model.EmployeeJobs.Where(j => j.Completed is null).Select(j => j).ToList();
-    var uncompletedJobs = Model.EmployeeJobs.Where(j => j.Completed is not null).Select(j => j).ToList();
+    var completedJobs = Model.EmployeeJobs.Where(j => j.Completed is not null).Select(j => j).ToList();
+    var uncompletedJobs = Model.EmployeeJobs.Where(j => j.Completed is null).Select(j => j).ToList();
     var allEmployees = Model.Employees;
 }
 
@@ -11,32 +11,35 @@
     <div class="row">
         <div class="col me-2">
             <h2 class="row">Работы к выполнению:</h2>
-            <div class="row alert alert-success" data-bs-spy="scroll">
+            <div class="row alert alert-success" id="jobList" data-bs-spy="scroll">
                 @foreach (var job in uncompletedJobs)
                 {
                     var creator = allEmployees.First(e => e.EmployeeId == job.CreatorEmplId);
-                    <div class="row alert-info mb-2 ms-0 rounded-1">
-                        <div class="col-10">
-                            @if (creator.FatherName is not null)
-                            {
-                                <p class="row">Задание от @creator.SecondName @creator.FirstName[0] . @creator.FatherName</p>
-                            }
-                            else
-                            {
-                                <p class="row">Задание от @creator.SecondName @creator.FirstName</p>
-                            }
-                            <p class="row">Описание задания: @job.Description</p>
-                            <p class="row">Должно быть готово к @job.Deadline</p>
+                    <div id="job_@job.JobId">
+                        <div class="row alert-info mb-2 ms-0 rounded-1">
+                            <div class="col-10">
+                                @if (creator.FatherName is not null)
+                                {
+                                    <p class="row">Задание от @creator.SecondName @creator.FirstName[0] . @creator.FatherName</p>
+                                }
+                                else
+                                {
+                                    <p class="row">Задание от @creator.SecondName @creator.FirstName</p>
+                                }
+                                <p class="row">Описание задания: @job.Description</p>
+                                <p class="row">Должно быть готово к @job.Deadline</p>
+                            </div>
+                            <button class="col btn btn-primary mb-2" id="completeTask" accesskey="@job.JobId">Отметить, как выполненное</button>
                         </div>
-                        <button class="col btn btn-primary mb-2">Отметить, как выполненное</button>
                     </div>
-                    
                 }
+
             </div>
+
         </div>
         <div class="col ms-2">
             <h2 class="row">Выполненные работы</h2>
-            <div class="row alert alert-secondary data-bs-spy=" scroll"">
+            <div class="row alert alert-secondary" id="completedList" data-bs-spy="scroll">
                 @foreach (var job in completedJobs)
                 {
                     var creator = allEmployees.First(e => e.EmployeeId == job.CreatorEmplId);
@@ -59,3 +62,7 @@
     </div>
     <a class="row btn btn-danger" asp-action="Logout" asp-controller="Verification">Выйти из системы</a>
 </div>
+
+@section Scripts{
+    <script src="~/js/completeTask.js"></script>
+}
