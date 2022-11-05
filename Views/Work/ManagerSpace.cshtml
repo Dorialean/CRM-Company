@@ -38,12 +38,10 @@
                     }
                 </div>
             </div>
-            <button class="col btn btn-success m-2">Добавить задание</button>
+            <button id="append_job_@client.ContractId" class="col btn btn-success m-2">Добавить задание</button>
         }
     </div>
-    @*
-        Здесь надо добавить логику добавления задания
-    *@
+
     <div class="row alert alert-success">
         <input id="client_search_info" class="col-8" type="text" placeholder="Введите что-то о клиенте"/>
         <button id="client_searchb" class="col btn btn-primary ms-1">Найти клиента</button>
@@ -66,7 +64,15 @@
         var avClients = @Html.Raw(Json.Serialize(Model.AvailableClients));
         var ptClients = @Html.Raw(Json.Serialize(Model.PotentialClients));
         var allClients = [...avClients, ...ptClients];
-        allClients = [...new Set(allClients.map(cl => cl))]
+        allClients = [...new Set(allClients.map(cl => cl))];
+
+        var contracts = @Html.Raw(Json.Serialize(Model.Contracts));
+
+        var redirect = function(contractId){
+            const url = @Url.Action("AppendJob", "Work", new { employees = Model.Employees.ToList(), contracts = Model.Contracts.FirstOrDefault(c => c.ContractId.ToString() == "__contractId__")});
+            window.location.href = url.replace('__contractId__', contractId);
+        }
     </script>
     <script src="~/js/ClientSearcher.js"></script>
+    <script src="~/js/AppendingJobs.js"></script>
 }

@@ -1,5 +1,48 @@
-﻿@model Contract
+﻿@model ManagersAppendJob
 @{
     Layout = "_Layout";
     ViewBag.Title = "Добавление задания";
+
+    var creator = Model.Employees.FirstOrDefault(e => e.Login == User.Identity.Name);
+    var employees = Model.Employees;
+    List<SelectListItem> emplNamesToIdSelect = new();
+    foreach (var empl in employees)
+    {
+        emplNamesToIdSelect.Add(new SelectListItem() 
+        {
+            Text = empl.FatherName == null || empl.FatherName == string.Empty 
+            ? string.Join(' ', new string[]{ empl.FirstName, empl.SecondName}) 
+            : string.Join(' ', new string[] { empl.FirstName, empl.SecondName, empl.FatherName }),
+            Value = empl.EmployeeId.ToString()
+        });
+    }
+    List<SelectListItem> priorities = new()
+    {
+        new SelectListItem(){ Text="Не так важно", Value="low"},
+        new SelectListItem(){ Text="Умеренно важно", Value="medium"},
+        new SelectListItem(){ Text="Срочно", Value="high"}
+    };
+    List<SelectListItem> isContract = new()
+    {
+        new SelectListItem(){Text="Да", Value=Model.Contract.ContractId.ToString()},
+        new SelectListItem(){Text="Нет", Value=null}
+    };
 }
+
+<div class="row">
+    <h2 class="row">Страница создания нового задания</h2>
+    @Html.BeginForm("AppendJob", "Work", FormMethod.Post, new { @class="row alert alert-success mt-2" })
+    {
+        @Html.HiddenFor(j => j.JobToAppend.CreatorEmplId, creator.EmployeeId)
+        <p class="row">Вы: @creator.FirstName @creator.SecondName</p>
+        @Html.DropDownListFor(j => j.JobToAppend.ExecutorEmplId, emplNamesToIdSelect , new { @class = "row m-1 rounded" });
+        <div class="row">
+            <p class="col">Задание для данного контракта?</p>
+            @Html.DropDownListFor(j => j.JobToAppend.ContrId, isContract, new{@class="col"})
+        </div>
+        <label for="description">Описание задачи</label>
+        @Html.TextBoxFor(j => j.JobToAppend.Description, new{ @name="description", @placeholder="Введите описание задачи", @class="row"})
+        @Html.DropDownListFor(j => j.JobToAppend.Prior, priorities, new { @class="row"})
+        <input class="row" type="submit" value="Подтвердить создание задания"/>
+    }
+</div>

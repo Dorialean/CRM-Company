@@ -147,9 +147,30 @@ namespace Company_CRM.Controllers
             
         }
 
+        [Authorize(Roles = Role.Manager)]
+        [HttpGet]
         public IActionResult AppendJob(Contract contract)
         {
-            return View();
+            return View(contract);
+        }
+
+        [Authorize(Roles = Role.Manager)]
+        [HttpPost]
+        public IActionResult AppendJob(Job jobInfo)
+        {
+            using (_sneakerFactoryContext)
+            {
+                _sneakerFactoryContext.Jobs.Add(new Job()
+                {
+                    CreatorEmplId = jobInfo.CreatorEmplId,
+                    ExecutorEmplId = jobInfo.ExecutorEmplId,
+                    ContrId = jobInfo.ContrId,
+                    Description = jobInfo.Description,
+                    Created = DateTime.Now,
+                    Deadline = jobInfo.Deadline
+                });
+            }
+            return RedirectToAction("ManagerSpace", "Work");
         }
     }
 }
