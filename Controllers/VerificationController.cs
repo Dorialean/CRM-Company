@@ -54,7 +54,7 @@ public class VerificationController : Controller
     }
 
     [HttpPost]
-    public IActionResult Auth(UserInfo userInfo)
+    public async Task<IActionResult> Auth(UserInfo userInfo)
     {
         using (_sneakerFactoryContext)
         {
@@ -63,8 +63,8 @@ public class VerificationController : Controller
             {
                 if (empl.Password.SequenceEqual(GeneratePassword(userInfo.Password, empl.Hired)))
                 {
-                    GenerateIdentityClaims(empl);
-                    return User.IsInRole(Role.Manager) ? RedirectToAction("ManagerSpace", "Work") : RedirectToAction("EmployeeSpace", "Work");
+                    await GenerateIdentityClaims(empl);
+                    return RedirectToAction("Index","Home");
                 }
                 else
                     return BadRequest("Неравильный пароль");
