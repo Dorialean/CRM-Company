@@ -17,6 +17,6 @@ namespace Company_CRM.Models
         public DateTime? Meeting { get; set; }
         public Contract ContractInfo { get; set; }
         // [Required(ErrorMessage = "Поле обязательно к заполнению")]
-        public Dictionary<string, string> SneakerIdToValue { get; set; }
+        public Dictionary<string, string?> SneakerIdToValue { get; set; }
     }
 }

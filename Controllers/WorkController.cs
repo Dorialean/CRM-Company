@@ -71,14 +71,7 @@ namespace Company_CRM.Controllers
         }
         [HttpPost]
         public IActionResult ClientOrder(ClientOrderInfo info)
-        {
-            if (!ModelState.IsValid)
-            {
-                Console.WriteLine(ModelState.ErrorCount);
-                ViewBag.Sneakers = _sneakerFactoryContext.Sneakers.ToArray();
-                return View(info);
-            }
-            
+        {            
             using (_sneakerFactoryContext)
             {
                 var avClient = new AvailableClient()
@@ -112,7 +105,8 @@ namespace Company_CRM.Controllers
                 int contractsId = _sneakerFactoryContext.Contracts.Count();
                 foreach (var sneakerId in info.SneakerIdToValue.Keys)
                 {
-                    int amount = int.Parse(info.SneakerIdToValue[sneakerId]);
+                    int amount = 0;
+                    int.TryParse(info.SneakerIdToValue[sneakerId], out amount);
                     if(amount > 0)
                     {
                         for (int i = 0; i < amount; i++)

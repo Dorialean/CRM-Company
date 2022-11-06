@@ -20,7 +20,9 @@
             var potClient = ptClients.First(pc => pc.ClientId == client.ClientId);
             Dictionary<string, string> sneakerModelToAmount = (from clc in clientContracts
                                                                join sn in sneakers on clc.SneakerId equals sn.SneakerId
-                                                               select new { Key = sn.Model, Value = clientContracts.Count(c => c.SneakerId == sn.SneakerId).ToString() }).ToDictionary(item => item.Key, item => item.Value);
+                                                               select new { Key = sn.Model, Value = clientContracts.Count(c => c.SneakerId == sn.SneakerId).ToString() })
+                                                               .DistinctBy(sneaker => sneaker.Key)
+                                                               .ToDictionary(item => item.Key, item => item.Value);
             <div class="col-10 btn-light">
                 <p class="row">@client.OrganisationName : @clientContracts.Count()</p>
                 @if (potClient.Meeting is not null)

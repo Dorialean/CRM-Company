@@ -45,6 +45,7 @@
         <label for="description">Описание задачи</label>
         @Html.TextBoxFor(j => j.JobToAppend.Description, new{ @name="description", @placeholder="Введите описание задачи", @class="row mt-1 mb-1"})
         @Html.DropDownListFor(j => j.JobToAppend.Prior, priorities, new { @class="row mt-1 mb-1"})
+        @Html.TextBoxFor(j => j.JobToAppend.Deadline, new{ type="date", @class="row mt-1 mb-1"})
         <input class="row mt-2 btn btn-primary" type="submit" value="Подтвердить создание задания"/>
     }
 </div>
