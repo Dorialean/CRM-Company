@@ -65,13 +65,9 @@
         var ptClients = @Html.Raw(Json.Serialize(Model.PotentialClients));
         var allClients = [...avClients, ...ptClients];
         allClients = [...new Set(allClients.map(cl => cl))];
-
-        var contracts = @Html.Raw(Json.Serialize(Model.Contracts));
-
-        var redirect = function(contractId){
-            const url = @Url.Action("AppendJob", "Work", new { employees = Model.Employees.ToList(), contracts = Model.Contracts.FirstOrDefault(c => c.ContractId.ToString() == "__contractId__")});
-            window.location.href = url.replace('__contractId__', contractId);
-        }
+        
+        var contracts = @Html.Raw(Json.Serialize(contracts));
+        var info = @Html.Raw(Json.Serialize(new ManagersAppendJob(){Employees = employees, JobToAppend = new Job()}));
     </script>
     <script src="~/js/ClientSearcher.js"></script>
     <script src="~/js/AppendingJobs.js"></script>

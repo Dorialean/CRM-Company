@@ -31,18 +31,20 @@
 
 <div class="row">
     <h2 class="row">Страница создания нового задания</h2>
-    @Html.BeginForm("AppendJob", "Work", FormMethod.Post, new { @class="row alert alert-success mt-2" })
+    @using(Html.BeginForm("AppendJob", "Work", FormMethod.Post, new { @class="row alert alert-success mt-2" }))
     {
-        @Html.HiddenFor(j => j.JobToAppend.CreatorEmplId, creator.EmployeeId)
-        <p class="row">Вы: @creator.FirstName @creator.SecondName</p>
-        @Html.DropDownListFor(j => j.JobToAppend.ExecutorEmplId, emplNamesToIdSelect , new { @class = "row m-1 rounded" });
+        <p class="row">Вы:<strong>@creator.FirstName @creator.SecondName</strong></p>
+        <div class=row>
+            <p class="col">Задание создаётся для: </p>
+            @Html.DropDownListFor(j => j.JobToAppend.ExecutorEmplId, emplNamesToIdSelect , new { @class = "col-8 m-1 rounded" });
+        </div>
         <div class="row">
             <p class="col">Задание для данного контракта?</p>
             @Html.DropDownListFor(j => j.JobToAppend.ContrId, isContract, new{@class="col"})
         </div>
         <label for="description">Описание задачи</label>
-        @Html.TextBoxFor(j => j.JobToAppend.Description, new{ @name="description", @placeholder="Введите описание задачи", @class="row"})
-        @Html.DropDownListFor(j => j.JobToAppend.Prior, priorities, new { @class="row"})
-        <input class="row" type="submit" value="Подтвердить создание задания"/>
+        @Html.TextBoxFor(j => j.JobToAppend.Description, new{ @name="description", @placeholder="Введите описание задачи", @class="row mt-1 mb-1"})
+        @Html.DropDownListFor(j => j.JobToAppend.Prior, priorities, new { @class="row mt-1 mb-1"})
+        <input class="row mt-2 btn btn-primary" type="submit" value="Подтвердить создание задания"/>
     }
 </div>

@@ -149,26 +149,39 @@ namespace Company_CRM.Controllers
 
         [Authorize(Roles = Role.Manager)]
         [HttpGet]
-        public IActionResult AppendJob(Contract contract)
+        public IActionResult AppendJob(int id)
         {
-            return View(contract);
+            using (_sneakerFactoryContext)
+            {
+                return View(new ManagersAppendJob()
+                {
+                    Contract = _sneakerFactoryContext.Contracts.FirstOrDefault(c => c.ContractId == id),
+                    Employees = _sneakerFactoryContext.Employees.ToList(),
+                    JobToAppend = new Job()
+                });
+            }
+                
         }
 
         [Authorize(Roles = Role.Manager)]
         [HttpPost]
-        public IActionResult AppendJob(Job jobInfo)
+        public IActionResult AppendJob(ManagersAppendJob maj)
         {
+            Job jobInfo = maj.JobToAppend;
+            
             using (_sneakerFactoryContext)
             {
                 _sneakerFactoryContext.Jobs.Add(new Job()
                 {
-                    CreatorEmplId = jobInfo.CreatorEmplId,
+                    CreatorEmplId = _sneakerFactoryContext.Employees.FirstOrDefault(e => e.Login == User.Identity.Name).EmployeeId,
                     ExecutorEmplId = jobInfo.ExecutorEmplId,
                     ContrId = jobInfo.ContrId,
                     Description = jobInfo.Description,
                     Created = DateTime.Now,
-                    Deadline = jobInfo.Deadline
+                    Deadline = jobInfo.Deadline,
+                    Prior = jobInfo.Prior,
                 });
+                _sneakerFactoryContext.SaveChanges();
             }
             return RedirectToAction("ManagerSpace", "Work");
         }

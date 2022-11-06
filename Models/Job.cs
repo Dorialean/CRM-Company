@@ -24,4 +24,12 @@ namespace Company_CRM.Models
         public virtual Employee CreatorEmpl { get; set; } = null!;
         public virtual Employee ExecutorEmpl { get; set; } = null!;
     }
+
+    enum Priority
+    {
+        low,
+        medium,
+        high
+    }
+
 }
