@@ -11,47 +11,47 @@ namespace Company_CRM.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmployeesController : ControllerBase
+    public class ContractsController : ControllerBase
     {
         private readonly SneakerFactoryContext _context;
 
-        public EmployeesController(SneakerFactoryContext context)
+        public ContractsController(SneakerFactoryContext context)
         {
             _context = context;
         }
 
-        // GET: api/Employees
+        // GET: api/Contracts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Employee>>> GetEmployees()
+        public async Task<ActionResult<IEnumerable<Contract>>> GetContracts()
         {
-            return await _context.Employees.ToListAsync();
+            return await _context.Contracts.ToListAsync();
         }
 
-        // GET: api/Employees/5
+        // GET: api/Contracts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Employee>> GetEmployee(int id)
+        public async Task<ActionResult<Contract>> GetContract(int id)
         {
-            var employee = await _context.Employees.FindAsync(id);
+            var contract = await _context.Contracts.FindAsync(id);
 
-            if (employee == null)
+            if (contract == null)
             {
                 return NotFound();
             }
 
-            return employee;
+            return contract;
         }
 
-        // PUT: api/Employees/5
+        // PUT: api/Contracts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEmployee(int id, Employee employee)
+        public async Task<IActionResult> PutContract(int id, Contract contract)
         {
-            if (id != employee.EmployeeId)
+            if (id != contract.ContractId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(employee).State = EntityState.Modified;
+            _context.Entry(contract).State = EntityState.Modified;
 
             try
             {
@@ -59,7 +59,7 @@ namespace Company_CRM.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!EmployeeExists(id))
+                if (!ContractExists(id))
                 {
                     return NotFound();
                 }
@@ -72,36 +72,36 @@ namespace Company_CRM.Controllers
             return NoContent();
         }
 
-        // POST: api/Employees
+        // POST: api/Contracts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Employee>> PostEmployee(Employee employee)
+        public async Task<ActionResult<Contract>> PostContract(Contract contract)
         {
-            _context.Employees.Add(employee);
+            _context.Contracts.Add(contract);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetEmployee", new { id = employee.EmployeeId }, employee);
+            return CreatedAtAction("GetContract", new { id = contract.ContractId }, contract);
         }
 
-        // DELETE: api/Employees/5
+        // DELETE: api/Contracts/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEmployee(int id)
+        public async Task<IActionResult> DeleteContract(int id)
         {
-            var employee = await _context.Employees.FindAsync(id);
-            if (employee == null)
+            var contract = await _context.Contracts.FindAsync(id);
+            if (contract == null)
             {
                 return NotFound();
             }
 
-            _context.Employees.Remove(employee);
+            _context.Contracts.Remove(contract);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool EmployeeExists(int id)
+        private bool ContractExists(int id)
         {
-            return _context.Employees.Any(e => e.EmployeeId == id);
+            return _context.Contracts.Any(e => e.ContractId == id);
         }
     }
 }

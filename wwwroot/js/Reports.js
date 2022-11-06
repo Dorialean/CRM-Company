@@ -20,7 +20,7 @@
     });
 
     employeeButton.click(function () {
-        fetch('https://localhost:7265/api/employees')
+        fetch('https://localhost:7265/api/employeesreport')
             .then(resp => resp.blob())
             .then(blob => {
                 const url = window.URL.createObjectURL(blob);
